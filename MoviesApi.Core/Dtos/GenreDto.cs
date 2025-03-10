@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MoviesApi.Core.Dtos
 {
-    public class CreateGenreDto
+    public class GenreDto
     {
         [MaxLength(100)]
         public string Name { get; set; }

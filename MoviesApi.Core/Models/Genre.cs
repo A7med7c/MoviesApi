@@ -11,8 +11,8 @@ namespace MoviesApi.Core.Models
     public class Genre
     {
         // byte because there will not be more than 255 genre
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public byte Id { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         [MaxLength(100)] // By Default Required
         public string Name { get; set; }
     }

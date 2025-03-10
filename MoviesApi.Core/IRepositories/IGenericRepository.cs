@@ -13,6 +13,11 @@ namespace MoviesApi.Core.IRepositories
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, int? take, int? skip,
             Expression<Func<T, object>> orderBy = null, string orderDirection = OrderBy.Ascending);
 
+        Task<T> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
+
+        T Update(T entity);
+        void Delete(T entity);
+
     }
 }

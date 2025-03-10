@@ -42,10 +42,30 @@ namespace MoviesApi.DataAccess.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<T> GetByIdAsync(int id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            return entity;
+        }
+
+
+
+
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             return entity;
+        }
+
+        public T Update(T entity)
+        {
+             _context.Update(entity); 
+            return entity;
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
         }
     }
 }
