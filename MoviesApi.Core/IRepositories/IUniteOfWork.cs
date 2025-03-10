@@ -10,6 +10,8 @@ namespace MoviesApi.Core.IRepositories
     public interface IUniteOfWork : IDisposable
     {
         public IGenericRepository<Genre> Genres { get;}
-        int Save();
+        public IGenericRepository<Movie> Movies { get;}
+
+        Task<int> SaveAsync();
     }
 }

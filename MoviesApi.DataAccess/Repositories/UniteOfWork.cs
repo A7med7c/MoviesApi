@@ -12,20 +12,22 @@ namespace MoviesApi.DataAccess.Repositories
     {
         private readonly ApplicationDbContext _context;
         public IGenericRepository<Genre> Genres { get; private set; }
+        public IGenericRepository<Movie> Movies { get; private set; }
 
         public UniteOfWork(ApplicationDbContext context)
         {
             _context = context;
             Genres = new GenericRepository<Genre>(_context);
+            Movies = new GenericRepository<Movie>(_context); 
         }
         public void Dispose()
         {
             _context.Dispose();
         }
 
-        public int Save()
+        public async Task<int> SaveAsync()
         {
-           return _context.SaveChanges();
+           return await _context.SaveChangesAsync();
         }
     }
 }
