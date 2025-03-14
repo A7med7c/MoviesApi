@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MoviesApi.Core.IRepositories;
+using MoviesApi.Core.Models;
 using MoviesApi.DataAccess;
 using MoviesApi.DataAccess.Repositories;
 
@@ -64,6 +65,9 @@ namespace MoviesApi
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddIdentityApiEndpoints<User>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             builder.Services.AddScoped<IUniteOfWork, UniteOfWork>();
@@ -80,6 +84,11 @@ namespace MoviesApi
             app.UseHttpsRedirection();
             //add CORS Middelware 
             app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().WithOrigins());
+
+            //to expose Identity endpoints like register accesstoken
+            app.MapGroup("api/identity").MapIdentityApi<User>();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

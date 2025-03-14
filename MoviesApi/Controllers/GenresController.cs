@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoviesApi.Core.Dtos;
 using MoviesApi.Core.IRepositories;
@@ -10,6 +11,8 @@ namespace MoviesApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class GenresController : ControllerBase
     {
         private readonly IUniteOfWork _uniteOfWork;
@@ -18,7 +21,9 @@ namespace MoviesApi.Controllers
         {
             _uniteOfWork = uniteOfWork;
         }
+
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllAsync(int? take = null, int? skip = null, string orderBy = "Name", string orderDirection = "ASC")
         {
 

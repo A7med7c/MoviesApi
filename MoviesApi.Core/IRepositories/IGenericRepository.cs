@@ -12,6 +12,10 @@ namespace MoviesApi.Core.IRepositories
     {
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, int? take, int? skip,
             Expression<Func<T, object>> orderBy = null, string orderDirection = OrderBy.Ascending, string[] includeProperties = null);
+        Task<IEnumerable<T>> GetAllAsync();
+
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+
 
         Task<T> GetByIdWithProperties(int id, string[] includeProperties = null);
         Task<T> GetByIdAsync(int id);

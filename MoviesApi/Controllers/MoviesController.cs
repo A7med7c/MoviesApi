@@ -24,15 +24,9 @@ namespace MoviesApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMoviesAsync(string title = null, int? take = null, int? skip = null)
+        public async Task<IActionResult> GetMoviesAsync()
         {
-            var movies = await  _uniteOfWork.Movies.GetAllAsync(
-                criteria: m => string.IsNullOrEmpty(title) || m.Title.Contains(title),
-                take: take,
-                skip: skip,
-                orderBy: m => m.Rate,
-                orderDirection: OrderBy.Descending,
-                includeProperties: new[] { "Genre" });
+            var movies = await _uniteOfWork.Movies.GetAllAsync();
 
             return Ok(movies);
         }
@@ -48,6 +42,16 @@ namespace MoviesApi.Controllers
 
             return Ok(movie);
         }
+
+        //[HttpGet("GetByGenreId")]
+        //public async Task<IActionResult> GetByGenreIdAsync(int genreId)
+        //{
+        //    var movies = await _uniteOfWork.Movies.FindAsync(m=> m.GenreId == genreId);
+         
+        //    return Ok(movies);
+        //}
+
+
 
         [HttpGet("GetByGenreId")]
         public async Task<IActionResult> GetByGenreIdAsync(int genreId, int? take = null, int? skip = null)

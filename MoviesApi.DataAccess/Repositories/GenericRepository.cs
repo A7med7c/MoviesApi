@@ -35,7 +35,7 @@ namespace MoviesApi.DataAccess.Repositories
             if (skip.HasValue)
                 query = query.Skip(skip.Value);
 
-            if(orderBy != null)
+            if (orderBy != null)
             {
                 if (orderDirection == OrderBy.Ascending)
                     query = query.OrderBy(orderBy);
@@ -46,6 +46,23 @@ namespace MoviesApi.DataAccess.Repositories
 
             return await query.ToListAsync();
         }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            var entities = await _context.Set<T>().ToListAsync();
+
+            return entities;
+        }
+
+
+       public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            var entities = await _context.Set<T>().Where(predicate).ToListAsync();
+
+            return entities;
+
+        }
+
 
         public async Task<T> GetByIdWithProperties(int id, string[] includeProperties = null)
         {
