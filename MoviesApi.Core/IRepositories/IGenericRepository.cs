@@ -11,8 +11,9 @@ namespace MoviesApi.Core.IRepositories
     public interface IGenericRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, int? take, int? skip,
-            Expression<Func<T, object>> orderBy = null, string orderDirection = OrderBy.Ascending);
+            Expression<Func<T, object>> orderBy = null, string orderDirection = OrderBy.Ascending, string[] includeProperties = null);
 
+        Task<T> GetByIdWithProperties(int id, string[] includeProperties = null);
         Task<T> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
 

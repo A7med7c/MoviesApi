@@ -28,6 +28,8 @@ namespace MoviesApi.Controllers
             // ordering by Name
             Expression<Func<Genre, object>> orderByExpression = g => g.Name;
 
+
+
             if (orderBy.ToLower() == "id")
                 orderByExpression = g => g.Id;
 

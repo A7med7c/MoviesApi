@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MoviesApi.Core.Models
 {
-    public class Genre
+    public class Genre : IEntity
     {
         // byte because there will not be more than 255 genre
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

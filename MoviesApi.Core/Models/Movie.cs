@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MoviesApi.Core.Models
 {
-    public class Movie
+    public class Movie : IEntity
     {
         public int Id { get; set; }
         [MaxLength(250)]

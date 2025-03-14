@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MoviesApi.Core.Consts;
 using MoviesApi.Core.IRepositories;
+using MoviesApi.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MoviesApi.DataAccess.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class , IEntity
     {
         private readonly ApplicationDbContext _context;
 
@@ -19,10 +20,14 @@ namespace MoviesApi.DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T,bool>> criteria,int? take , int? skip,
-            Expression<Func<T,object>>orderBy = null , string orderDirection = OrderBy.Ascending)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> criteria, int? take, int? skip,
+            Expression<Func<T, object>> orderBy = null, string orderDirection = OrderBy.Ascending, string[] includeProperties = null)
         {
             IQueryable<T> query = _context.Set<T>().Where(criteria);
+
+            if (includeProperties != null)
+                foreach (var include in includeProperties)
+                    query = query.Include(include);
 
             if (take.HasValue)
                 query = query.Take(take.Value);
@@ -42,14 +47,25 @@ namespace MoviesApi.DataAccess.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdWithProperties(int id, string[] includeProperties = null)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            IQueryable<T> query = _context.Set<T>();
+
+            foreach (var include in includeProperties.Where(p => !string.IsNullOrWhiteSpace(p)))
+            {
+                query = query.Include(include);
+            }
+
+            
+            var entity =  await query.FirstOrDefaultAsync(entity => entity.Id == id);
+
             return entity;
         }
 
-
-
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
 
         public async Task<T> AddAsync(T entity)
         {
