@@ -1,11 +1,10 @@
 ﻿
-using Microsoft.AspNetCore.Identity;
 
-namespace MoviesApi.Core.Models
+namespace MoviesApi.Core.Dtos
 {
-    public class User : IdentityUser
+    public class UpdateUserDetailsDto
     {
-
+    //    public  string Username { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public string? Nationality { get; set; }
     }

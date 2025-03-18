@@ -1,8 +1,11 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using MoviesApi.Core.IRepositories;
 using MoviesApi.Core.Models;
+
 using MoviesApi.DataAccess;
 using MoviesApi.DataAccess.Repositories;
 
@@ -10,7 +13,7 @@ namespace MoviesApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -67,12 +70,19 @@ namespace MoviesApi
             });
 
             builder.Services.AddIdentityApiEndpoints<User>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+               .AddRoles<IdentityRole>() // This is needed for roles
+               .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddDefaultTokenProviders();
+
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             builder.Services.AddScoped<IUniteOfWork, UniteOfWork>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -86,7 +96,9 @@ namespace MoviesApi
             app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().WithOrigins());
 
             //to expose Identity endpoints like register accesstoken
-            app.MapGroup("api/identity").MapIdentityApi<User>();
+            app.MapGroup("api/identity")
+                .WithTags("Identity")
+                .MapIdentityApi<User>();
 
             app.UseAuthentication();
 

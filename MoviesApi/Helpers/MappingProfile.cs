@@ -12,6 +12,7 @@ namespace MoviesApi.Helpers
                 .ForMember(src => src.Poster, opt => opt.Ignore());
             CreateMap<MovieUpdateDto,Movie>()
                 .ForMember(src => src.Poster, opt => opt.Ignore());
+            CreateMap<UpdateUserDetailsDto, User>();
 
         }
     }
